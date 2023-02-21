@@ -1,9 +1,4 @@
 
-"""
-https://scikit-learn.org/stable/auto_examples/linear_model/plot_logistic.html#sphx-glr-auto-examples-linear-model-plot-logistic-py
-
-"""
-
 from sklearn.preprocessing import OrdinalEncoder, MinMaxScaler
 from sklearn.metrics import classification_report
 from sklearn.model_selection import train_test_split
