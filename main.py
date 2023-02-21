@@ -60,7 +60,7 @@ class PSWorkshopQualifiers(object):
 
     def modelData(self):
 
-        # Applying logistic regression the various sets*
+        # Applying logistic regression to various sets
 
         X_train, X_test, Y_train, Y_test = train_test_split(self.features, self.target, test_size = 0.20, random_state = None)
         model = XGBClassifier(objective ='binary:logistic', random_state = None)
