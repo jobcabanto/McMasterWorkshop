@@ -76,8 +76,8 @@ class PSWorkshopQualifiers(object):
             writer = csv.writer(file)
         pass
 
-client = PSWorkshopQualifiers(r"C:\Users\JC\OneDrive\Documents\University - Level II\mathage\ScoringDataset_2023Qualification.csv", 
-                            r"C:\Users\JC\OneDrive\Documents\University - Level II\mathage\TrainingDataset_2023Qualification.csv")
+client = PSWorkshopQualifiers(r"", 
+                            r"")
 client.prepareTrainSet()
 client.unpackData()
 client.modelData()
