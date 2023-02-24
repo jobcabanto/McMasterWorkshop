@@ -78,9 +78,7 @@ class PSWorkshopQualifiers(object):
             self.submit.loc[i, "predictedResponseVariable"] = self.predictions[i]
         self.submit.to_csv("SubmissionExample_2023Qualification.csv", index=False)
 
-client = PSWorkshopQualifiers(r"C:\Users\JC\OneDrive\Documents\University - Level II\mathage\ScoringDataset_2023Qualification.csv", 
-                            r"C:\Users\JC\OneDrive\Documents\University - Level II\mathage\TrainingDataset_2023Qualification.csv",
-                            r"C:\Users\JC\OneDrive\Documents\University - Level II\mathage\SubmissionExample_2023Qualification.csv")
+client = PSWorkshopQualifiers(r"", r"", r"")
 client.prepareTrainSet()
 client.unpackData()
 client.modelData()
