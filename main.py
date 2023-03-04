@@ -86,7 +86,6 @@ class PSWorkshopQualifiers(object):
         model = XGBClassifier(objective = 'binary:logistic', eta = 0.475, n_estimators = 200, 
                               subsample = 0.75, colsample_bytree = 0.75, random_state = 36).fit(X_train, Y_train)
         # sns.regplot(x=np.ndarray.flat(X_test), y=Y_test, logistic=True, ci=None)
-        plt.show()
         # print(classification_report(Y_test, model.predict(X_test)))
         # self.predictions = model.predict(self.scoringFeatures)
         
