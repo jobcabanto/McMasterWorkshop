@@ -1,9 +1,12 @@
 
 from sklearn.preprocessing import OrdinalEncoder, MinMaxScaler
 from sklearn.metrics import classification_report
-from sklearn.model_selection import train_test_split
+from sklearn.utils import resample
+from sklearn.linear_model import LogisticRegression
+from sklearn.model_selection import train_test_split, GridSearchCV
 from xgboost import XGBClassifier
-import pandas as pd
+import pandas as pd, numpy as np, seaborn as sns, matplotlib.pyplot as plt
+# plt.style.use("ggplot")
 
 class PSWorkshopQualifiers(object):
     
@@ -25,12 +28,27 @@ class PSWorkshopQualifiers(object):
         self.scoreset["hadVehicleClaimInPast"] = ordEnc.fit_transform(self.scoreset[["hadVehicleClaimInPast"]])
         self.scoreset["vehicleStatus"] = ordEnc.fit_transform(self.scoreset[["vehicleStatus"]])
 
+        columns = ["Gender", "policyHolderAge", "hasCa2dianDrivingLicense",
+                   "territory",	"hasAutoInsurance",	"hadVehicleClaimInPast",
+                   "homeInsurancePremium", "saleChannel", "isOwner", "rentedVehicle",
+                    "hasMortgage", "nbWeeksInsured", "vehicleStatus"]
+        columns2 = ["Gender", "policyHolderAge", "hasCanadianDrivingLicense",
+                   "territory",	"hasAutoInsurance",	"hadVehicleClaimInPast",
+                   "homeInsurancePremium", "saleChannel", "isOwner", "rentedVehicle",
+                    "hasMortgage", "nbWeeksInsured", "vehicleStatus"]
+
         # Normalizing all quantitative variables
 
-        self.trainset = pd.DataFrame(MinMaxScaler().fit_transform(self.trainset.values))
-        self.scoreset = pd.DataFrame(MinMaxScaler().fit_transform(self.scoreset.values))
+        self.trainset[columns] = pd.DataFrame(MinMaxScaler().fit_transform(self.trainset[columns]))
+        self.scoreset[columns2] = pd.DataFrame(MinMaxScaler().fit_transform(self.scoreset[columns2]))
 
         return self.scoreset, self.trainset
+    
+    def featureEngineer(self):
+
+        self.trainset.drop(columns = ["policyHolderAge", "hasAutoInsurance", "homeInsurancePremium", "saleChannel", "isOwner", "rentedVehicle",
+                            "hasMortgage", "nbWeeksInsured", "vehicleStatus"])
+        return self.trainset
 
     def unpackData(self, tempFeatures = []):
 
@@ -65,12 +83,16 @@ class PSWorkshopQualifiers(object):
         # Applying logistic regression the various sets
 
         X_train, X_test, Y_train, Y_test = train_test_split(self.features, self.target, test_size = 0.20, random_state = 36, shuffle = True)
-        model = XGBClassifier(objective = 'binary:logistic', n_estimators = 1000, random_state = 36).fit(X_train, Y_train)
+        model = XGBClassifier(objective = 'binary:logistic', eta = 0.475, n_estimators = 200, 
+                              subsample = 0.75, colsample_bytree = 0.75, random_state = 36).fit(X_train, Y_train)
+        # sns.regplot(x=np.ndarray.flat(X_test), y=Y_test, logistic=True, ci=None)
+        plt.show()
         # print(classification_report(Y_test, model.predict(X_test)))
-        self.predictions = model.predict(self.scoringFeatures)
+        # self.predictions = model.predict(self.scoringFeatures)
+        
         # print(self.predictions[0:15])
         # print(len(self.predictions))
-        
+         
     def sendData(self):
 
         # Write predictions into .csv file
@@ -78,9 +100,15 @@ class PSWorkshopQualifiers(object):
             self.submit.loc[i, "predictedResponseVariable"] = self.predictions[i]
         self.submit.to_csv("SubmissionExample_2023Qualification.csv", index=False)
 
-client = PSWorkshopQualifiers(r"", r"", r"")
+client = PSWorkshopQualifiers(r"C:\Users\JC\OneDrive\Documents\University - Level II\mathage\ScoringDataset_2023Qualification.csv", 
+                            r"C:\Users\JC\OneDrive\Documents\University - Level II\mathage\TrainingDataset_2023Qualification.csv",
+                            r"C:\Users\JC\OneDrive\Documents\University - Level II\mathage\SubmissionExample_2023Qualification.csv")
 client.prepareTrainSet()
+# client.featureEngineer()
 client.unpackData()
 client.modelData()
-client.sendData()
+# client.sendData()
+
+
+
 
