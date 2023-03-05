@@ -1,4 +1,10 @@
 
+
+"""
+https://scikit-learn.org/stable/auto_examples/linear_model/plot_logistic.html#sphx-glr-auto-examples-linear-model-plot-logistic-py
+
+"""
+
 from sklearn.preprocessing import OrdinalEncoder, MinMaxScaler
 from sklearn.metrics import classification_report
 from sklearn.utils import resample
@@ -86,11 +92,14 @@ class PSWorkshopQualifiers(object):
         model = XGBClassifier(objective = 'binary:logistic', eta = 0.475, n_estimators = 200, 
                               subsample = 0.75, colsample_bytree = 0.75, random_state = 36).fit(X_train, Y_train)
         # sns.regplot(x=np.ndarray.flat(X_test), y=Y_test, logistic=True, ci=None)
+        # plt.show()
         # print(classification_report(Y_test, model.predict(X_test)))
-        # self.predictions = model.predict(self.scoringFeatures)
+        self.predictions = model.predict(self.scoringFeatures)
         
         # print(self.predictions[0:15])
         # print(len(self.predictions))
+
+        return self.predictions
          
     def sendData(self):
 
@@ -106,7 +115,9 @@ client.prepareTrainSet()
 # client.featureEngineer()
 client.unpackData()
 client.modelData()
-# client.sendData()
+client.sendData()
+
+
 
 
 
